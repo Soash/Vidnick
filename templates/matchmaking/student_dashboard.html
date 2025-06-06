@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+{% block style %}
+
+{% endblock%}
+
+{% block content %}
+<div class="card shadow p-4">
+
+    <h2 class="mb-4 text-center">Dashboard</h2>
+
+    <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Details</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in history %}
+                    <tr>
+                        <td>
+                            <strong>Topic:</strong> {{ request.expertise_name }}<br>
+                            <strong>Duration:</strong> {{ request.duration }} minutes<br>
+                            <strong>Preferred Time:</strong> {{ request.preferred_time }}<br>
+                            {% comment %} {{ request.description|safe }}<br> {% endcomment %}
+                            {% comment %} <strong>Amount:</strong> {{ request.amount|default:"N/A" }}<br><br> {% endcomment %}
+                            <strong>Status:</strong> {{ request.get_status_display }}<br><br>
+                            <a href="{% url 'meeting_log' request.id %}" class="btn btn-primary">Log</a>
+                            <a href="{% url 'request_history_detail' request.id %}" class="btn btn-primary">Details</a>
+                        </td>
+
+
+                        <td>
+                            {% if request.meeting_status == "start" and request.pay_status != "paid" %}
+                                <a href="{% url 'initiate_payment' request.id %}" class="btn btn-success">Pay {{ request.amount }}</a>
+                            {% elif request.pay_status == "paid" %}
+                                {% if request.meeting_status == "start" %}
+                                    <a href="{% url 'join_jitsi_meeting' request.id %}" class="btn btn-success">Join</a>
+                                    <a href="{% url 'meeting_end' request.meeting_id %}" class="btn btn-danger">End</a>
+                                {% else %}
+                                    <span class="badge bg-secondary">Meeting Ended</span><br><br>
+                                    <a href="{% url 'initiate_refund' request.id %}" class="btn btn-warning">Refund {{ request.refund_amount }}</a>
+                                    <form method="post" action="{% url 'submit_rating' request.id %}" class="mt-2">
+                                        {% csrf_token %}
+                                        <label for="rating" class="form-label">Rate the lesson</label>
+                                        <select name="rating" id="rating" class="form-select">
+                                            <option value="10">--- ⭐</option>
+                                            {% for x in rating_range %}
+                                                <option value="{{ x }}" {% if request.ratings == x %}selected{% endif %}>
+                                                    {{ x }} ⭐
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                                    </form>
+                                    <button type="button" class="btn btn-danger mt-2" onclick="toggleReportForm({{ request.id }})">
+                                        Report
+                                    </button>
+                                    <form method="post" action="{% url 'submit_report' request.id %}" id="report-form-{{ request.id }}" style="display: none;" class="mt-2">
+                                        {% csrf_token %}
+                                        <textarea name="description" rows="4" class="form-control" placeholder="Enter report details..."></textarea>
+                                        <button type="submit" class="btn btn-danger mt-2">Submit Report</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function toggleReportForm(requestId) {
+        const form = document.getElementById(`report-form-${requestId}`);
+        const reportBtn = document.getElementById(`report-btn-${requestId}`);
+        reportBtn.innerHTML = reportBtn.innerHTML === "Close" ? "Report" : "Close";
+        form.style.display = form.style.display === "none" ? "block" : "none";
+    }
+</script>
+{% endblock %}
+
+

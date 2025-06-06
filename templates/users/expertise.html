@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% block title %}Teacher Expertise{% endblock %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/expertise.css' %}">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Select2 library -->
+<script src="{% static 'admin/js/vendor/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'django_select2/django_select2.js' %}"></script>
+{% endblock%}
+
+
+{% block content %}
+
+
+<h2>Academic Expertise</h2>
+<button id="add-academic-btn" class="btn btn-blue">Add Academic Expertise</button>
+<div class="container" id="academic-form">
+    <form method="POST" class="form">
+        {% csrf_token %}
+        {{ academic_form.as_p }}
+        <button type="submit" name="add_academic" class="btn btn-blue">Add Academic Expertise</button>
+    </form>
+</div>
+<div class="table-responsive">
+    <table>
+        <tr>
+            <th>Subject</th>
+            <th>Class</th>
+            <th>Rate (BDT / hour)</th>
+            <th>Actions</th>
+        </tr>
+        {% for expertise in academic_expertise %}
+        <tr data-id="{{ expertise.pk }}">
+            <td class="subject">{{ expertise.subject_name }}</td>
+            <td class="class-level">{{ expertise.class_level }}</td>
+            <td class="rate">{{ expertise.rate }}</td>
+            <td class="actions">
+                <button class="btn btn-green btn-w">Edit</button>
+                <button class="btn btn-blue btn-w" style="display: none;">Save</button>
+                {% comment %} <a href="{% url 'delete_academic_expertise' expertise.pk %}" class="btn btn-red">Delete</a> {% endcomment %}
+                <button onclick="
+                                    window.location.href='{% url "delete_academic_expertise" expertise.pk %}';
+                                "
+                        class="btn btn-red btn-w">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+
+<h2>Skill Expertise</h2>
+<button id="add-skill-btn" class="btn btn-blue">Add Skill Expertise</button>
+
+<div class="container" id="skill-form">
+    <form method="POST" class="form">
+        {% csrf_token %}
+        {{ skill_form.as_p }}
+        <button type="submit" name="add_skill">Add Skill Expertise</button>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table>
+        <tr>
+            <th>Skill Name</th>
+            <th>Experience ( y )</th>
+            <th>Rate (BDT / hour)</th>
+            <th>Actions</th>
+        </tr>
+        {% for expertise in skill_expertise %}
+        <tr data-id="{{ expertise.pk }}">
+            <td class="skill-name">{{ expertise.skill_name }}</td>
+            <td class="years-of-experience">{{ expertise.years_of_experience }}</td>
+            <td class="rate">{{ expertise.rate }}</td>
+            <td>
+                <button class="btn btn-green btn-w">Edit</button>
+                <button class="btn btn-blue btn-w" style="display: none;">Save</button>
+                {% comment %} <a href="{% url 'delete_skill_expertise' expertise.pk %}" class="btn btn-red">Delete</a> {% endcomment %}
+                <button onclick="
+                                    window.location.href='{% url "delete_skill_expertise" expertise.pk %}';
+                                "
+                        class="btn btn-red btn-w">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+<div>
+    <button id="add-subject-skill-btn" class="btn btn-blue">Request to add subject/skill</button>
+    <form method="post" action="{% url 'request_subject_skill' %}" id="add-subject-skill-form" style="display: none;" class="form">
+        {% csrf_token %}
+        <textarea name="description" rows="4" class="form-control mt-2" placeholder="Enter details..."></textarea> <br>
+        <button type="submit" class="btn btn-red">Submit</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+{{ skill_form.media }}
+
+<script>
+    document.getElementById('add-academic-btn').addEventListener('click', function() {
+        var form = document.getElementById('academic-form');
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+
+    document.getElementById('add-skill-btn').addEventListener('click', function() {
+        var form = document.getElementById('skill-form');
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+    document.getElementById('add-subject-skill-btn').addEventListener('click', function() {
+        var form = document.getElementById('add-subject-skill-form');
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    });
+</script>
+
+<script>
+    // Edit button functionality
+    document.querySelectorAll('.btn-green').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const expertiseId = row.getAttribute('data-id');
+
+            // Determine the type of expertise based on the row
+            const isAcademic = row.querySelector('.class-level') !== null;
+
+            if (isAcademic) {
+                const classLevelCell = row.querySelector('.class-level');
+                //const subjectCell = row.querySelector('.subject');
+                const rateCell = row.querySelector('.rate');
+
+                // Check if cells exist
+                if (classLevelCell && rateCell) {
+                    classLevelCell.innerHTML = `<input type="text" value="${classLevelCell.textContent}" />`;
+                    //subjectCell.innerHTML = `<input type="text" value="${subjectCell.textContent}" />`;
+                    rateCell.innerHTML = `<input type="text" value="${rateCell.textContent}" />`;
+                }
+            } else {
+                //const skillNameCell = row.querySelector('.skill-name');
+                const yearsOfExperienceCell = row.querySelector('.years-of-experience');
+                const rateCell = row.querySelector('.rate');
+
+                // Check if cells exist
+                if (yearsOfExperienceCell && rateCell) {
+                    //skillNameCell.innerHTML = `<input type="text" value="${skillNameCell.textContent}" />`;
+                    yearsOfExperienceCell.innerHTML = `<input type="text" value="${yearsOfExperienceCell.textContent}" />`;
+                    rateCell.innerHTML = `<input type="text" value="${rateCell.textContent}" />`;
+                }
+            }
+
+            // Show the save button and hide the edit button
+            this.style.display = 'none';
+            row.querySelector('.btn-blue').style.display = 'inline-block';
+        });
+    });
+
+    // Save button functionality
+    document.querySelectorAll('.btn-blue').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            if (!row) return;
+            console.log(row);
+            const expertiseId = row.getAttribute('data-id');
+
+            // Determine the type of expertise based on the row
+            const isAcademic = row.querySelector('.class-level') !== null;
+            let data;
+
+            if (isAcademic) {
+                const classLevelInput = row.querySelector('.class-level input').value;
+                //console.log(classLevelInput);
+                //const subjectInput = row.querySelector('.subject input').value;
+                //console.log(subjectInput);
+                const rateInput = row.querySelector('.rate input').value;
+                //console.log(rateInput);
+
+                data = {
+                    expertise_id: expertiseId,
+                    class_level: classLevelInput,
+                    //subject: subjectInput,
+                    rate: rateInput,
+                };
+            } else {
+                //const skillNameInput = row.querySelector('.skill-name input').value;
+                const yearsOfExperienceInput = row.querySelector('.years-of-experience input').value;
+                const rateInput = row.querySelector('.rate input').value;
+
+                data = {
+                    expertise_id: expertiseId,
+                    //skill_name: skillNameInput,
+                    years_of_experience: yearsOfExperienceInput,
+                    rate: rateInput,
+                };
+            }
+
+            // Send AJAX request to update expertise
+            fetch(`/update-expertise/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (isAcademic) {
+                        row.querySelector('.class-level').textContent = data.class_level;
+                        row.querySelector('.subject').textContent = data.subject;
+                        row.querySelector('.rate').textContent = data.rate;
+                    } else {
+                        row.querySelector('.skill-name').textContent = data.skill_name;
+                        row.querySelector('.years-of-experience').textContent = data.years_of_experience;
+                        row.querySelector('.rate').textContent = data.rate;
+                    }
+
+                    // Hide the save button and show the edit button
+                    this.style.display = 'none';
+                    row.querySelector('.btn-green').style.display = 'inline-block';
+                } else {
+                    alert('Failed to update expertise.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+
+    // Utility function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+
+{% endblock %}
+
+
+

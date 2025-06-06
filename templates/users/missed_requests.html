@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Missed Requests{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 style="text-align: center;">Missed Requests</h1><br>
+    <table id="missedRequestsTable" class="display">
+        <thead>
+            <tr>
+                {% comment %} <th>ID</th> {% endcomment %}
+                <th>Teacher</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in missed_requests %}
+            <tr>
+                {% comment %} <td>{{ request.id }}</td> {% endcomment %}
+                <td>{{ request.teacher.user.username }}</td>
+                <td>{{ request.teacher.phone }}</td>
+                <td>
+                    <a href="/admin/users/teacher/{{ request.teacher.id }}/change/">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block script %}
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#missedRequestsTable').DataTable();
+        });
+    </script>
+{% endblock %}

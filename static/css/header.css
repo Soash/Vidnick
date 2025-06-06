@@ -1,0 +1,135 @@
+/* Base Styles */
+.header-container {
+    position: relative; /* important for mobile menu positioning */
+    padding: 0% 2%;
+}
+
+.header-container header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #ffffff;
+}
+
+/* Logo Section */
+.header-container .logo-wrapper a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #212529;
+}
+
+.header-container .logo-wrapper a img {
+    margin-right: 0.5rem;
+}
+
+.header-container .logo-wrapper a span {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+
+/* Header Links */
+.header-container #header-links {
+    display: flex;
+    align-items: center;
+}
+
+.header-container #header-links a {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    /* border: 1px solid transparent; */
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+
+
+#header-links .blue-btn{
+    color: #fff;
+    background: linear-gradient(45deg, #4e54c8, #8f94fb);
+}
+
+#header-links .blue-btn:hover {
+    background: linear-gradient(45deg, #3b41b8, #7c80f2);
+}
+
+#header-links .red-btn{
+    color: red;
+    background: none;
+    border: 1px solid red;
+}
+
+#header-links .red-btn:hover{
+    background: red;
+    color: #fff;
+}
+
+
+
+
+/* Hamburger Button */
+.header-container #offcanvas-btn button {
+    background: none;
+    border: 1px solid #3d3d3d; /* Updated border color */
+    cursor: pointer;
+    padding: 0rem 0.6rem; /* Updated padding */
+    border-radius: 0.5rem; /* Updated border radius */
+    display: none;
+    transition: all 0.3s ease-in-out;
+    font-size: 30px;
+}
+
+.header-container #offcanvas-btn button:hover {
+    background: #4e54c8;
+    color: #fff;
+}
+
+
+
+.header-container #offcanvas-btn{
+    display: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .header-container {
+        padding: inherit;
+    }
+    
+    .header-container #offcanvas-btn{
+        display: block;
+    }
+    
+    .header-container #header-links {
+        display: none;
+        flex-direction: column;
+        background: #fff;
+        position: absolute;
+        top: 70px;
+        right: 0rem;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* border-radius: 0.5rem; */
+        z-index: 1000;
+    }
+
+    .header-container #header-links.active {
+        display: flex;
+        gap: 0.8rem;
+    }
+
+    .header-container #offcanvas-btn button {
+        display: block;
+    }
+
+
+    .header-container #header-links a {
+        width: 100px;
+    }
+}

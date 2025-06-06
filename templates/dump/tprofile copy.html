@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Teacher Profile{% endblock %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<style>
+    #notifyButton {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+    #token1{
+        display: none;
+    }
+</style>
+<script defer>
+    window.addEventListener('DOMContentLoaded', () => {
+        const notifyButton = document.getElementById('notifyButton');
+        if (notifyButton) {
+            notifyButton.click();
+        }
+    });
+</script>
+
+
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <h1>{{ user.first_name }}'s Profile</h1>
+            <p class="username">@{{ user.username }}</p>
+        </div>
+        <div>
+            <button id="notifyButton"><i class="fas fa-bell fa-3x"></i></button>
+            <div class="message"></div>
+                {% comment %} {% if teacher.token %}
+                    <span>Push Notification On</span>
+                {% endif %} {% endcomment %}
+                
+                {% comment %} <span>Device Token:</span> {% endcomment %}
+            <div id="token"></div>
+        </div>
+        <div class="profile-body">
+            <p>Email: {{ user.email }}</p>
+            <p>Vidnick ID: {{ teacher.vidnick_id }}</p>
+            <p>Balance: {{ teacher.current_balance }} BDT</p>
+            <p>Class: {{ teacher.total_class }} completed</p>
+            <p>Class: {{ teacher.missed_class }} missed</p>
+            <p>Rating: {{ teacher.average_rating|default:"-" }}/10</p>
+            <p>Status: {{ teacher.get_verification_display }}</p>
+        </div>
+    </div>
+
+    <div class="card-grid">
+        <a href="{% url 'teacher_requests' %}">
+            <div class="card">
+                <i class="fas fa-tasks fa-3x"></i>
+                <h2>Requests</h2>
+            </div>
+        </a>
+        <a href="{% url 'teacher_dashboard' %}">
+            <div class="card">
+                <i class="fa-solid fa-table-columns fa-3x"></i>
+                <h2>Dashboard</h2>
+            </div>
+        </a>
+        <a href="{% url 'teacher_expertise' %}">
+            <div class="card">
+                <i class="fas fa-star fa-3x"></i>
+                <h2>Expertise</h2>
+            </div>
+        </a>
+        <a href="{% url 'update_teacher_profile' %}">
+            <div class="card">
+                <i class="fas fa-user fa-3x"></i>
+                <h2>Profile</h2>
+            </div>
+        </a>
+        
+        <a href="{% url 'cashout_view' %}">
+            <div class="card">
+                <i class="fa-solid fa-money-bill fa-3x"></i>
+                <h2>Cashout</h2>
+            </div>
+        </a>
+
+        {% comment %}
+        <div class="card">
+            <i class="fas fa-wallet fa-3x"></i>
+            <h2>Cash Out</h2>
+        </div>
+        <div class="card">
+            <i class="fas fa-question-circle fa-3x"></i>
+            <h2>Help Center</h2>
+        </div>
+        <div class="card">
+            <i class="fas fa-star fa-3x"></i>
+            <h2>Reviews</h2>
+        </div> {% endcomment %}
+
+        <a href="{% url 'logout' %}">
+            <div class="card">
+                <i class="fa-solid fa-power-off fa-3x"></i>
+                <h2>Logout</h2>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<!-- Firebase JS -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyC57YV45aQ0VwWEKA26kswphT4J0RKpvgs",
+        authDomain: "vidnik-pn.firebaseapp.com",
+        projectId: "vidnik-pn",
+        storageBucket: "vidnik-pn.appspot.com",
+        messagingSenderId: "298821539958",
+        appId: "1:298821539958:web:e186b5ae09878ee4592757",
+        measurementId: "G-E4GPHBSNH5"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    messaging.onMessage((payload) => {
+        console.log('Message received. ', payload);
+    
+        // Display notification manually when app is in foreground
+        const notificationTitle = payload.notification.title;
+        const notificationOptions = {
+            body: payload.notification.body,
+        };
+    
+        if (Notification.permission === "granted") {
+            const notification = new Notification(notificationTitle, notificationOptions);
+        }
+    });
+    
+    document.getElementById('notifyButton').addEventListener('click', function() {
+        // Check if the browser supports notifications
+        if ('Notification' in window) {
+            // Request notification permission
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    // If permission granted, get the FCM token
+                    getToken();
+                } else {
+                    console.log('Notification permission denied.');
+                }
+            });
+        } else {
+            alert('Your browser does not support notifications.');
+        }
+    });
+
+    function getToken() {
+        messaging.getToken({ vapidKey: "BJFCIgh8Nk1DxUVNkIMRZg_h0L-ZPYvPBpjgdK2HZIPIe6-NV5tdsEHqRKhEErBw_5Sf6BS2Wm7kqACPHGeyTSE" }).then((currentToken) => {
+            if (currentToken) {
+                console.log(currentToken);
+                // document.getElementById('token').textContent = currentToken;
+                sendTokenToServer(currentToken);
+            } else {
+                console.log('No registration token available. Request permission to generate one.');
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+            document.getElementById('token').textContent = 'click again';
+        });
+    }
+
+    function sendTokenToServer(token) {
+        fetch('/save-token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ token: token })
+        }).then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+{% endblock %}

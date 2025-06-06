@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+    <style>
+        .dt-search{
+            margin: 20px 0px;
+        }
+        .dt-search label, .dt-input{
+            margin-right: 10px;
+        }
+        .dt-paging-button{
+            padding: 0px 10px;
+        }
+    </style>
+{% endblock style %}
+    
+{% block content %}
+
+    
+    <div class="card shadow p-4 h-100">
+        <h2 class="my-4 fw-bold text-center">Session ID: {{ request_history.id }}</h2>
+        <p><strong><i class="bi bi-book text-primary me-2"></i> Topic:</strong> {{ request_history.expertise_name }}</p>
+        <p><strong><i class="bi bi-mortarboard text-success me-2"></i> Class Level:</strong> {{ request_history.class_level_name }}</p>
+        <p><strong><i class="bi bi-translate text-info me-2"></i> Language:</strong> {{ request_history.language }}</p>
+        <p><strong><i class="bi bi-gender-ambiguous text-warning me-2"></i> Gender:</strong> {{ request_history.gender }}</p>
+        <p><strong><i class="bi bi-sticky text-secondary me-2"></i> Note:</strong> {{ request_history.note|default:"N/A" }}</p>
+        <p><strong><i class="bi bi-currency-dollar text-success me-2"></i> Amount:</strong> {{ request_history.amount }}</p>
+        <p><strong><i class="bi bi-hourglass-split text-primary me-2"></i> Duration:</strong> {{ request_history.duration }}</p>
+        <p><strong><i class="bi bi-clock text-danger me-2"></i> Preferred Time:</strong> {{ request_history.preferred_time }}</p>
+  
+        {% if request_history.session_type == 'browse' %}
+            
+        <div class="table-responsive">
+            <h3 class="fw-bold text-center my-3">Request Sent</h3>
+            <table class="table table-striped table-bordered" id="assigned-teachers-table">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th class="text-nowrap">Vidnick ID</th>
+                        <th class="w-50 text-nowrap">University</th>
+                        <th class="text-nowrap">Rate</th>
+                        <th class="text-nowrap">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for teacher in assigned_teachers %}
+                    <tr>
+                        <td>{{ teacher.vidnick_id }}</td>
+                        <td>{{ teacher.university }}</td>
+                        <td>{{ teacher.rate }}</td>
+                        <td>
+                            <a href="{% url 'delete_teacher' request_history.id teacher.id %}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="table-responsive">
+            <h3 class="fw-bold text-center my-3">Available Teachers</h3>
+            <table class="table table-striped table-bordered" id="teachersTable">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th class="text-nowrap">Vidnick ID</th>
+                        <th class="w-50 text-nowrap">University</th>
+                        <th class="text-nowrap">Rate</th>
+                        <th class="text-nowrap">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td>{{ teacher.vidnick_id }}</td>
+                        <td>{{ teacher.university }}</td>
+                        <td>{{ teacher.rate }}</td>
+                        <td>
+                            <a href="{% url 'assign_teacher' request_history.id teacher.id %}" class="btn btn-success btn-sm">
+                                <i class="bi bi-send-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+        
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+    $(document).ready(function () {
+        $('#teachersTable').DataTable({
+
+        });
+    });
+</script>
+
+{% endblock script %}
+    

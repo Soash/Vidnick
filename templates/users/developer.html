@@ -1,0 +1,102 @@
+{% extends "base2.html" %}
+{% block title %}Developer{% endblock %}
+{% load static %}
+
+
+{% block style %}
+<style>
+    .content{
+        background-image: url("{% static 'img/dev-bg.webp' %}");
+        background-size: cover;
+        background-position: center;
+        min-height: 75vh;
+    }
+
+    /* CSS */
+    .button-50 {
+    text-decoration: none;
+    appearance: button;
+    background-color: #000;
+    background-image: none;
+    border: 1px solid #000;
+    border-radius: 4px;
+    box-shadow: #fff 4px 4px 0 0,#000 4px 4px 0 1px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: ITCAvantGardeStd-Bk,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    margin: 0 5px 10px 0;
+    overflow: visible;
+    padding: 12px 40px;
+    text-align: center;
+    text-transform: none;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    }
+
+    .button-50:focus {
+    text-decoration: none;
+    }
+
+    .button-50:hover {
+    text-decoration: none;
+    }
+
+    .button-50:active {
+    box-shadow: rgba(0, 0, 0, .125) 0 3px 5px inset;
+    outline: 0;
+    }
+
+    .button-50:not([disabled]):active {
+    box-shadow: #fff 2px 2px 0 0, #000 2px 2px 0 1px;
+    transform: translate(2px, 2px);
+    }
+
+    @media (min-width: 768px) {
+    .button-50 {
+        padding: 12px 50px;
+    }
+    }
+
+
+</style>
+{% endblock style %}
+    
+{% block content %}
+<div class="container py-5" style="max-width: 400px;">
+    <div class="shadow p-3 mb-5 bg-white rounded">
+        <h1 class="text-center mb-4">Meet the Developers</h1>
+        <div class="d-flex flex-column align-items-center">
+            <div class="card mb-4 text-center" style="width: 100%;">
+                {% comment %} <img src="https://via.placeholder.com/150" class="card-img-top" alt="Agent V"> {% endcomment %}
+                <div class="card-body">
+                    {% comment %} <h5 class="card-title">Agent V</h5> {% endcomment %}
+                    <a href="https://www.agentv.tech/" class="button-50">Agent V</a>
+                </div>
+            </div>
+            <div class="card mb-4 text-center" style="width: 100%;">
+                {% comment %} <img src="https://via.placeholder.com/150" class="card-img-top" alt="Soash"> {% endcomment %}
+                <div class="card-body">
+                    {% comment %} <h5 class="card-title">Soash</h5> {% endcomment %}
+                    <a href="https://soash.github.io/" class="button-50">Soash</a>
+                </div>
+            </div>
+            <div class="card mb-4 text-center" style="width: 100%;">
+                {% comment %} <img src="https://via.placeholder.com/150" class="card-img-top" alt="Nixon"> {% endcomment %}
+                <div class="card-body">
+                    {% comment %} <h5 class="card-title">Nixon</h5> {% endcomment %}
+                    <a href="https://nixondebantu.vercel.app/" class="button-50">Nixon</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

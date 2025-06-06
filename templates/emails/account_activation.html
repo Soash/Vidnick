@@ -1,0 +1,18 @@
+<html>
+<body>
+    <h2>Welcome, {{ user.first_name }}!</h2>
+    <p>Thank you for registering as a <strong>{{ user_role }}</strong>.</p>
+    
+    <p>Your login details:</p>
+    <ul>
+        <li><strong>Username:</strong> {{ username }}</li>
+        <li><strong>Password:</strong> {{ password }}</li>
+    </ul>
+    
+    <p>Please activate your account by clicking the link below:</p>
+    <a href="{{ activation_link }}">Activate Your Account</a>
+    
+    <p>Best regards,</p>
+    <p>Your Team</p>
+</body>
+</html>

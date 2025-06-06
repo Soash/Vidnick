@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clockpicker.css' %}">
+    <style>
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container px-0">
+    <div class="card shadow p-4 bg-body-tertiary">
+        <h2 class="my-4 fw-bold text-center">{{ title }}</h2>
+
+        <form method="POST" class="mx-auto" style="max-width: 700px; width: 100%;">
+            {% csrf_token %}
+        
+            <!-- Expertise -->
+            <div class="form-group col-12 mb-3">
+                <label for="id_expertise_name">Topic</label>
+                {{ form.expertise_name }}
+            </div>
+        
+            <!-- Class Level -->
+            <div class="form-group col-12 mb-3">
+                <label for="id_class_level_name">Class Level</label>
+                {{ form.class_level_name }}
+            </div>
+        
+            <!-- Duration -->
+            <div class="form-group col-12 mb-3">
+                <label for="id_duration">Duration</label>
+                {{ form.duration }}
+            </div>
+        
+            <!-- Language -->
+            <div class="form-group col-12 mb-3">
+                <label for="id_language">Language</label>
+                {{ form.language }}
+            </div>
+        
+            <!-- Gender -->
+            <div class="form-group col-12 mb-3">
+                <label for="id_gender">Gender</label>
+                {{ form.gender }}
+            </div>
+        
+            <!-- Preferred Time -->
+            <div class="form-group col-12 mb-3">
+                <label for="id_preferred_time">Preferred Time</label>
+                <div class="row d-flex">
+                    <div class="col-12 col-md-6 mb-1 mb-md-0">
+                        {{ form.preferred_date }}
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="input-group clockpicker">
+                            {{ form.preferred_time_input }}
+                            <span class="input-group-text">
+                                <i class="bi bi-clock"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Note -->
+            <div class="form-group col-12 mb-3">
+                <label for="id_note">Note</label>
+                {{ form.note }}
+            </div>
+
+            {% if show_amount %}
+            <div class="form-group col-12 mb-3">
+                <label for="id_amount">Amount</label>
+                {{ form.amount }}
+            </div>
+            <span>Min Amount: </span><span id="min-amount">0</span> <br> <br>
+            {% endif %}
+            
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill shadow-sm">Save</button>
+            </div>
+
+            
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{{ form.media }}
+<script type="text/javascript" src="{% static 'js/bootstrap-clockpicker.js' %}"></script>
+<script type="text/javascript">
+    $('.clockpicker').clockpicker({
+        default: 'now',
+        donetext: 'Done',
+        twelvehour: true,
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const durationSelect = document.getElementById("id_duration");
+        const minAmountSpan = document.getElementById("min-amount");
+        const amountInput = document.getElementById("id_amount");
+
+        if (!durationSelect || !minAmountSpan || !amountInput) {
+            // console.error("One or more required elements are not found in the DOM.");
+            return;
+        }
+    
+        // Function to calculate minimum amount based on duration
+        const calculateMinAmount = (duration) => {
+            switch (parseInt(duration)) {
+                case 15: return 50;
+                case 30: return 100;
+                case 45: return 150;
+                case 60: return 200;
+                case 90: return 300;
+                case 120: return 400;
+                default: return 200; // Default minimum amount
+            }
+        };
+    
+        // Function to update min amount display and input
+        const updateMinAmount = () => {
+            const selectedDuration = durationSelect.value;
+            const minAmount = calculateMinAmount(selectedDuration);
+            minAmountSpan.textContent = minAmount;
+            amountInput.min = minAmount;
+            amountInput.value = minAmount;
+        };
+    
+        // Attach event listener to duration dropdown
+        durationSelect.addEventListener("change", updateMinAmount);
+        
+        // Initialize the min amount display on page load
+        updateMinAmount();
+    });    
+</script>
+
+{% endblock %}

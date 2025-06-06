@@ -1,0 +1,228 @@
+/* Style for the main container */
+.v-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: #2A13A9;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+/* Style for the form container */
+.form-container {
+    width: 50%;
+    padding: 50px;
+    background-color: #fff;
+    border-radius: 10px 0 0 10px;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.form-container-2 {
+    border-radius: 0 10px 10px 0;
+}
+
+/* Style for the h2 heading */
+
+
+/* .form-container h2 {
+    text-align: center;
+    color: #333;
+    font-size: 28px;
+    margin-bottom: 20px;
+} */
+
+/* Style for the form inputs (Django form fields) */
+
+
+/* input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+} */
+
+/* Focus effect for input fields */
+
+
+/* input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #2A13A9;
+    outline: none;
+    box-shadow: 0 0 5px rgba(42, 19, 169, 0.5);
+} */
+
+/* Style for the button */
+
+
+/* button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #2A13A9;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+} */
+
+/* Hover effect for the button */
+/* button[type="submit"]:hover {
+    background-color: #1b0d75;
+} */
+
+/* Style for the form-details container */
+.form-details {
+    width: 50%;
+    padding: 40px;
+    color: #fff;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Style for the form-details heading */
+.form-details h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Style for the text and link */
+.form-details span {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.form-details a {
+    color: #fff;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+/* Hover effect for the link */
+.form-details a:hover {
+    text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+#learner-card, #expert-card {
+	width: 45%;
+	padding: 20px;
+	background-color: #f4f4f4;
+	border-radius: 8px;
+	text-align: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-size: 18px;
+	color: #333;
+	display: flex;
+	flex-direction: column;
+    border: 2px solid #2A13A9;
+}
+
+#learner-card i, #expert-card i {
+    font-size: 40px;
+    margin-bottom: 10px;
+    color: #2A13A9;
+}
+
+/* Hover effect for cards */
+#learner-card:hover, #expert-card:hover {
+    background-color: #2A13A9;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+#learner-card:hover i, #expert-card:hover i {
+    color: #fff;
+}
+
+.form-card{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Transition for the form visibility */
+#student-signup, #teacher-signup {
+    display: none;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.form-container.active {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.toggle-btn {
+    background-color: #2A13A9;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 12px;
+}
+
+.toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .v-container {
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .form-container,
+    .form-details {
+        width: 100%;
+    }
+
+    .form-container {
+        border-radius: 0px 0px 10px 10px;
+        padding: 30px;
+    }
+
+    /* .form-details {
+        border-radius: 0 0 10px 10px;
+    } */
+
+    /* Responsive design */
+
+    .form-card {
+        flex-direction: column;
+    }
+
+    #learner-card, #expert-card {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+}
+
+

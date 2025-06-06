@@ -1,0 +1,714 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="soash">
+  <meta name="description" content="vidnick">
+  <meta name="keywords" content="education, online learning, skill acquisition, personalized learning, expert mentors">
+  <title>Home</title>
+
+  <link rel="icon" href="{% static 'img/favicon.ico' %}">
+
+  <link rel="stylesheet" href="{% static 'index/index.css' %}">
+  <link rel="stylesheet" href="{% static 'css/header.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+
+  <body>
+
+    <!-- Header -->
+    <div class="header-container">
+      <header>
+          <div class="logo-wrapper">
+              <a href="/">
+                  <img src="{% static 'img/logo.png' %}" alt="vidnick-logo" width="40" height="40">
+                  <span>Vidnick</span>
+              </a>
+          </div>
+  
+          {% if user.is_authenticated %}
+            <div id="header-links">
+              {% if user.is_teacher %}
+                <a href="{% url 'teacher_profile' username=user.username %}" class="blue-btn">Profile</a>
+              {% else %}
+                <a href="{% url 'student_profile' username=user.username %}" class="blue-btn">Profile</a>
+              {% endif %}
+              <a href="{% url 'logout' %}" class="red-btn">Logout</a>
+            </div>
+          {% else %}
+            <div id="header-links">
+              <a href="{% url 'login_view' %}" class="blue-btn">Login</a>
+              <a href="{% url 'register_view' %}" class="red-btn">Signup</a>
+            </div>
+          {% endif %}
+          
+
+  
+          <div id="offcanvas-btn">
+              <button type="button" id="toggle-btn">
+                <i class="bi bi-list"></i>
+              </button>
+          </div>
+      </header>
+    </div>
+  
+  
+  
+
+    <!-- Carousel -->
+    <div id="default-carousel" class="relative w-full" data-carousel="slide">
+      <!-- Carousel wrapper -->
+      <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+        <!-- Item 1 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            src="{% static 'index/assets/carousel-1.webp' %}"
+            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 2 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            src="{% static 'index/assets/carousel-2.webp' %}"
+            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 3 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            src="{% static 'index/assets/carousel-3.webp' %}"
+            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 4 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            src="{% static 'index/assets/carousel-4.webp' %}"
+            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+        <!-- Item 5 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img
+            src="{% static 'index/assets/carousel-5.webp' %}"
+            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+            alt="..."
+          />
+        </div>
+      </div>
+      <!-- Slider indicators -->
+      <div
+        class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3"
+      >
+        <button
+          type="button"
+          class="w-3 h-3 rounded-full"
+          aria-current="true"
+          aria-label="Slide 1"
+          data-carousel-slide-to="0"
+        ></button>
+        <button
+          type="button"
+          class="w-3 h-3 rounded-full"
+          aria-current="false"
+          aria-label="Slide 2"
+          data-carousel-slide-to="1"
+        ></button>
+        <button
+          type="button"
+          class="w-3 h-3 rounded-full"
+          aria-current="false"
+          aria-label="Slide 3"
+          data-carousel-slide-to="2"
+        ></button>
+        <button
+          type="button"
+          class="w-3 h-3 rounded-full"
+          aria-current="false"
+          aria-label="Slide 4"
+          data-carousel-slide-to="3"
+        ></button>
+        <button
+          type="button"
+          class="w-3 h-3 rounded-full"
+          aria-current="false"
+          aria-label="Slide 5"
+          data-carousel-slide-to="4"
+        ></button>
+      </div>
+      <!-- Slider controls -->
+      <button
+        type="button"
+        class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+        data-carousel-prev
+      >
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none"
+        >
+          <svg
+            class="w-4 h-4 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 1 1 5l4 4"
+            />
+          </svg>
+          <span class="sr-only">Previous</span>
+        </span>
+      </button>
+      <button
+        type="button"
+        class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+        data-carousel-next
+      >
+        <span
+          class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none"
+        >
+          <svg
+            class="w-4 h-4 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+          <span class="sr-only">Next</span>
+        </span>
+      </button>
+    </div>
+
+    <!-- Benefits -->
+    <section id="benefits" class="my-14 mx-auto">
+      <div class="text-center">
+        <h1 class="text-5xl font-bold">
+          Maximize Your Learning Potential with Vidnick
+        </h1>
+        <div
+          class="mt-8 flex justify-center items-center max-w-7xl mx-auto flex-wrap gap-8"
+        >
+          <div
+            class="flex flex-col justify-center items-center gap-4 text-center max-w-80 border border-gray-200 p-8 hover:shadow-lg transition-shadow duration-300"
+            style="height: 350px"
+          >
+            <img
+              src="{% static 'index/assets/benefit1.svg' %}"
+              alt="Effortless Skill Acquisition"
+              class="w-16 h-16"
+            />
+            <h4 class="text-2xl font-bold">Effortless Skill Acquisition</h4>
+            <p>Struggling with self-study and connect with expert mentors</p>
+            <a href="#" class="text-indigo-700 underline font-semibold"
+              >Learn More →</a
+            >
+          </div>
+          <div
+            class="flex flex-col justify-center items-center gap-4 text-center max-w-80 border border-gray-200 p-8 hover:shadow-lg transition-shadow duration-300"
+            style="height: 350px"
+          >
+            <img
+              src="{% static 'index/assets/benefit2.svg' %}"
+              alt="Effortless Skill Acquisition"
+              class="w-16 h-16"
+            />
+            <h4 class="text-2xl font-bold">Explosive Knowledge Growth</h4>
+            <p>
+              Vidnick's learning optimization approach provides tailored
+              learning experiences
+            </p>
+            <a href="#" class="text-indigo-700 underline font-semibold"
+              >Learn More →</a
+            >
+          </div>
+          <div
+            class="flex flex-col justify-center items-center gap-4 text-center max-w-80 border border-gray-200 p-8 hover:shadow-lg transition-shadow duration-300"
+            style="height: 350px"
+          >
+            <img
+              src="{% static 'index/assets/benefit3.svg' %}"
+              alt="Unmatched Learning ROI"
+              class="w-16 h-16"
+            />
+            <h4 class="text-2xl font-bold">Unmatched Learning ROI</h4>
+            <p>
+              Vidnick's suite of features offers a flexible credit system for
+              cost-effective learning
+            </p>
+            <a href="#" class="text-indigo-700 underline font-semibold"
+              >Learn More →</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section id="process" class="my-14 mx-auto bg-indigo-700 text-white py-14">
+      <h1 class="text-5xl font-bold text-center mb-14">
+        Know Our Working Process
+      </h1>
+      <div
+        class="flex justify-center items-center max-w-7xl mx-auto flex-wrap gap-8"
+      >
+        <!-- Process 1 -->
+        <div
+          class="flex flex-col justify-center items-center gap-4 text-center max-w-64"
+        >
+          <img
+            src="{% static 'index/assets/process-1.svg' %}"
+            alt="Search & Select"
+            class="w-20 h-20"
+          />
+          <h4 class="text-2xl font-bold">1. Search & Select</h4>
+          <p>
+            Empower students to find their ideal topic and choose the perfect
+            expert teacher.
+          </p>
+        </div>
+        <!-- Process 2 -->
+        <div
+          class="flex flex-col justify-center items-center gap-4 text-center max-w-64"
+        >
+          <img
+            src="{% static 'index/assets/process-2.svg' %}"
+            alt="Connect & Engage"
+            class="w-20 h-20"
+          />
+          <h4 class="text-2xl font-bold">2. Connect & Engage</h4>
+          <p>
+            Facilitate seamless one-on-one online meetings between students and
+            teachers.
+          </p>
+        </div>
+        <div
+          class="flex flex-col justify-center items-center gap-4 text-center max-w-64"
+        >
+          <img
+            src="{% static 'index/assets/process-3.svg' %}"
+            alt="Learn & Absorb"
+            class="w-20 h-20"
+          />
+          <h4 class="text-2xl font-bold">3. Learn & Absorb</h4>
+          <p>
+            Enable comprehensive topic mastery through personalized instruction
+            and interaction.
+          </p>
+        </div>
+        <div
+          class="flex flex-col justify-center items-center gap-4 text-center max-w-64"
+        >
+          <img
+            src="{% static 'index/assets/process-4.svg' %}"
+            alt="Review & Reflect"
+            class="w-20 h-20"
+          />
+          <h4 class="text-2xl font-bold">4. Review & Reflect</h4>
+          <p>
+            Encourage students to assess their learning and solidify newfound
+            knowledge.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- QNA -->
+    <section id="qna" class="my-14 mx-auto max-w-7xl flex flex-col sm:flex-row justify-center items-center gap-8 p-4">
+      <div class="flex">
+        <img src="{% static 'index/assets/qna.webp' %}" alt="QNA" />
+      </div>
+      <div class="flex flex-col w-full">
+        <h1 class="text-4xl font-bold mb-8">
+          Frequently Asked Questions: Your Guide To Vidnick
+        </h1>
+        <div id="accordion-color" data-accordion="collapse" class="w-full">
+          <!-- Item 1 -->
+          <h2 id="accordion-color-heading-1">
+            <button
+              type="button"
+              class="flex items-center justify-between w-full p-5 font-medium text-gray-500 border border-b-0 border-gray-200 hover:bg-indigo-100"
+              data-accordion-target="#accordion-color-body-1"
+              aria-expanded="true"
+              aria-controls="accordion-color-body-1"
+            >
+              <span>What subjects are available?</span>
+              <svg
+                data-accordion-icon
+                class="w-6 h-6 rotate-180 shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </h2>
+          <div
+            id="accordion-color-body-1"
+            class="hidden"
+            aria-labelledby="accordion-color-heading-1"
+          >
+            <div class="p-5 border border-b-0 border-gray-200">
+              <p class="mb-2 text-gray-500">
+                We offer a wide range of subjects, from academic disciplines to
+                practical skills. If you can't find what you're looking for, let
+                us know!
+              </p>
+            </div>
+          </div>
+          <!-- Item 2 -->
+          <h2 id="accordion-color-heading-2">
+            <button
+              type="button"
+              class="flex items-center justify-between w-full p-5 font-medium text-gray-500 border border-b-0 border-gray-200 hover:bg-indigo-100"
+              data-accordion-target="#accordion-color-body-2"
+              aria-expanded="false"
+              aria-controls="accordion-color-body-2"
+            >
+              <span>How do I pay?</span>
+              <svg
+                data-accordion-icon
+                class="w-6 h-6 rotate-180 shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a 1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </h2>
+          <div
+            id="accordion-color-body-2"
+            class="hidden"
+            aria-labelledby="accordion-color-heading-2"
+          >
+            <div class="p-5 border border-b-0 border-gray-200">
+              <p class="text-justify mb-2 text-gray-500">
+                If students choose to pay a specific Expert, they need to pay the amount set by the Expert. If the student wants to set their own price, a notification will be sent to all Experts. The first Expert to accept the offer will be assigned to the student. The student must pay before joining the session with the Expert.
+              </p>
+            </div>
+          </div>
+          <!-- Item 3 -->
+          <h2 id="accordion-color-heading-3">
+            <button
+              type="button"
+              class="flex items-center justify-between w-full p-5 font-medium text-gray-500 border border-gray-200 hover:bg-indigo-100"
+              data-accordion-target="#accordion-color-body-3"
+              aria-expanded="false"
+              aria-controls="accordion-color-body-3"
+            >
+              <span>How long are the sessions?</span>
+              <svg
+                data-accordion-icon
+                class="w-6 h-6 shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </h2>
+          <div
+            id="accordion-color-body-3"
+            class="hidden"
+            aria-labelledby="accordion-color-heading-3"
+          >
+            <div class="p-5 border border-t-0 border-gray-200">
+              <p class="mb-2 text-gray-500">
+                Sessions are one-on-one. We will connect you with a coach. The
+                duration of the session will be decided by the student.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empowerment -->
+    <section id="empowerment" class="mx-auto bg-[#E3E0F4] pb-28 py-14">
+      <!-- Toggle Switch -->
+      <div class="flex justify-center items-center mb-8 gap-4">
+        <span class="text-lg font-medium text-gray-900">Learner</span>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="toggle" class="sr-only peer" />
+          <div
+            class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-indigo-700"
+          ></div>
+        </label>
+        <span class="text-lg font-medium text-gray-900">Expert</span>
+      </div>
+      <!-- Content -->
+      <div id="learnerContent">
+        <!-- Learner -->
+        <h1 class="text-3xl font-bold text-center">
+          Empower Your Learning Journey
+        </h1>
+        <div
+          class="flex justify-center items-center max-w-7xl mx-auto md:flex-row flex-col gap-8 mt-8"
+        >
+          <img src="{% static 'index/assets/learner.webp' %}" alt="learner" />
+          <div class="flex flex-col items-start gap-4 px-3">
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Access a world of knowledge at your fingertips
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Learn at your own pace with personalized attention
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Connect with experts who understand your learning style
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Boost your grades or acquire new skills efficiently
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Flexible scheduling to fit your busy life
+            </p>
+            <a href="{% url 'register_view' %}?signup=learner" class="bg-indigo-700 text-white px-4 py-2 rounded-full hover:bg-indigo-800 mt-4">
+              Start Learning Today
+            </a>            
+          </div>
+        </div>
+      </div>
+      <div id="expertContent" class="hidden">
+        <!-- Expert -->
+        <h1 class="text-3xl font-bold text-center">
+          Share Your Expertise, Earn While You Teach
+        </h1>
+        <div class="flex justify-center items-center max-w-7xl mx-auto md:flex-row flex-col gap-8 mt-8">
+          <img src="{% static 'index/assets/experts.svg' %}" alt="learner" />
+          <div class="flex flex-col items-start gap-4 px-3">
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Turn your knowledge into a rewarding side hustle
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Set your own schedule and rates
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Help students achieve their goals
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Gain teaching experience and enhance your resume
+            </p>
+            <p class="flex justify-center items-center gap-2">
+              <img
+                src="{% static 'index/assets/options.svg' %}"
+                class="w-4 h-4"
+                alt="*"
+              />
+              Join a community of passionate educators
+            </p>
+            <a href="{% url 'register_view' %}?signup=expert" class="bg-indigo-700 text-white px-4 py-2 rounded-full hover:bg-indigo-800 mt-4">
+              Become an Expert
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="bg-gray-900 text-white py-10 px-4 sm:px-16">
+      <div class="container mx-auto px-0 sm:px-16">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              <!-- First & Second Columns in One Line on Mobile -->
+              <div class="sm:col-span-2 grid grid-cols-2 gap-8">
+                  <!-- First Column -->
+                  <div>
+                      <ul class="space-y-2">
+                          <li><a href="/" class="text-white hover:underline">Home</a></li>
+                          <li><a href="#" class="text-white hover:underline">About</a></li>
+                          <li><a href="{% url 'developer_view' %}" class="text-white hover:underline">Developers</a></li>
+                      </ul>
+                  </div>
+                  
+                  <!-- Second Column -->
+                  <div>
+                      <ul class="space-y-2">
+                          <li><a href="#" class="text-white hover:underline">FAQs</a></li>
+                          <li><a href="#" class="text-white hover:underline">Privacy Policy</a></li>
+                          <li><a href="#" class="text-white hover:underline">T & C</a></li>
+                      </ul>
+                  </div>
+              </div>
+              
+              <!-- Third Column Below on Mobile -->
+              <div class="sm:col-span-1">
+                  <ul class="space-y-2">
+                      {% comment %} <li>
+                          <a href="#" class="flex items-center text-white hover:underline">
+                              <i class="bi bi-geo-alt-fill mr-2"></i> Dhaka, Bangladesh
+                          </a>
+                      </li> {% endcomment %}
+                      <li>
+                          <a href="#" class="flex items-center text-white hover:underline">
+                              <i class="bi bi-facebook mr-2"></i> Facebook
+                          </a>
+                      </li>
+                      <li>
+                          <a href="mailto:vidnick.edu@gmail.com" class="flex items-center text-white hover:underline">
+                              <i class="bi bi-envelope-at-fill mr-2"></i> vidnick.edu@gmail.com
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+  
+          <div class="flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4 pt-8 mt-8 border-t border-white-900">
+              <div>
+                  <a href="/" class="text-decoration-none">
+                      <img src="{% static 'img/logo.png' %}" alt="vidnick-logo" width="40" height="40" class="rounded-md">
+                  </a>
+              </div>
+              <div>
+                  <p class="text-sm">&copy; 2024 Vidnick. All rights reserved.</p>
+              </div>
+          </div>
+      </div>
+    </footer>
+
+    <script src="{% static 'index/toggle.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector("form").addEventListener("submit", function (event) {
+          event.preventDefault();
+    
+          let formData = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            message: document.getElementById("message").value,
+          };
+    
+          fetch("/send-email/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCSRFToken(),
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Email sent successfully!");
+              } else {
+                alert("Error: " + data.message);
+              }
+            })
+            .catch((error) => {
+              alert("Request failed: " + error);
+            });
+        });
+    
+        function getCSRFToken() {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== "") {
+            document.cookie.split(";").forEach((cookie) => {
+              let [key, value] = cookie.trim().split("=");
+              if (key === "csrftoken") {
+                cookieValue = decodeURIComponent(value);
+              }
+            });
+          }
+          return cookieValue;
+        }
+      });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const toggleBtn = document.querySelector('#offcanvas-btn button');
+          const headerLinks = document.querySelector('#header-links');
+  
+          toggleBtn.addEventListener('click', () => {
+              headerLinks.classList.toggle('active');
+          });
+      });
+    </script>
+
+  </body>
+</html>
+
+

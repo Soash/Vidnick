@@ -1,0 +1,11 @@
+.env
+vidnick.json
+firebase-messaging-sw.js
+db.sqlite3
+__pycache__/
+staticfiles/
+media/
+migrations/
+*.pyc
+
+

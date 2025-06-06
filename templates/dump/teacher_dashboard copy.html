@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block style %}
+
+{% endblock%}
+
+
+{% block content %}
+<h2>Dashboard</h2>
+    <div class="table-responsive">
+    <table>
+        <tr>
+            <th>Details</th>
+            <th>Action</th>
+        </tr>
+        {% for request in accepted_requests %}
+        <tr>
+            {% comment %} <td>{{ request.student.user.first_name }}</td> {% endcomment %}
+
+            <td>
+                {% if request.subject %}
+                    <span>Subject: {{ request.subject.name }}</span>
+                {% elif request.skill %}
+                    <span>Skill: {{ request.skill.name }}</span>
+                {% endif %}
+
+                <br><br>
+
+                Duration: {{ request.duration }} minutes
+
+                <br><br>
+
+                Preferred Time: {{request.preferred_time}}<br>
+                {{ request.description|safe }}<br>
+                Amount: {{ request.amount }}
+                
+                <br><br>
+
+                {{ request.get_status_display }}<br>
+                <br>
+                <a href="{% url 'meeting_log' request.id %}" class="btn btn-blue" style="display: inline-block;">Log</a>
+            </td>
+
+
+            <td>
+                {% if not request.end_time %}
+                    {% if request.start_within_time_frame %}
+                        <a href="{% url 'start_jitsi_meeting' request.id %}" class="btn btn-green start">Start</a>
+                    {% else %}
+                        <span>Not accessible. You can start meeting within 3 min before and 10 min after the <b>Preffered Time.</b></span>
+                    {% endif %}
+
+                    {% if request.claim_btn %}
+                        <a href="{% url 'meeting_end' request.meeting_id %}" class="btn btn-red end">End & Claim</a>
+                    {% endif %}
+                {% else %}
+                    <span style="text-align: center;display: block;">Meeting Ended</span>
+                {% endif %}
+            </td>
+
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
+
+
+
+

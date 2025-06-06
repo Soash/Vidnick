@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Teacher Dashboard</h2>
+
+    <!-- Pending Requests Table -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Pending Requests</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in pending_requests %}
+                        <tr>
+                            <td>
+                    
+                                Duration: {{ req.duration }} minutes<br>
+                                Preferred Time: {{ req.preferred_time|date:"M d, Y H:i A" }}<br>
+                                {% if req.session_type == 'find' %}
+                                    Amount: {{ req.amount }} BDT
+                                {% else %}
+                                    Amount: {% teacher_rate req.expertise_name req.class_level_name request.user %} BDT/Hour
+                                {% endif %}
+                                 
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'accept_request' req.id %}" class="btn btn-success">
+                                    Accept <i class="fas fa-check"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">No pending requests.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accepted Requests Table -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Accepted Requests</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in accepted_requests %}
+                        <tr>
+                            <td>
+                                <br>
+                                Duration: {{ request.duration }} minutes<br>
+                                Preferred Time: {{ request.preferred_time|date:"M d, Y H:i A" }}<br>
+       
+                                <strong>Amount:</strong> {{ request.amount }}
+                                <br><br>
+                                <span class="badge bg-info">{{ request.get_status_display }}</span>
+                                <br><br>
+                                <a href="{% url 'meeting_log' request.id %}" class="btn btn-primary">
+                                    View Log <i class="fas fa-book"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                {% if not request.end_time %}
+                                    {% if request.start_within_time_frame %}
+                                        <a href="{% url 'start_jitsi_meeting' request.id %}" class="btn btn-primary">
+                                            Start <i class="fas fa-video"></i>
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted d-block">
+                                            You can start within <b>3 min before</b> and <b>10 min after</b> the preferred time.
+                                        </span>
+                                    {% endif %}
+                                    
+                                    {% if request.claim_btn %}
+                                        <a href="{% url 'meeting_end' request.meeting_id %}" class="btn btn-danger mt-2">
+                                            End & Claim <i class="fas fa-hand-holding-usd"></i>
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">Meeting Ended</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">No accepted requests.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

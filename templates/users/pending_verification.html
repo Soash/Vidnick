@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Pending Verification{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <h1 style="text-align: center;">Pending Verification</h1><br>
+    <table id="pendingVerificationTable" class="display">
+        <thead>
+            <tr>
+                <th>Vidnick ID</th>
+                <th>Username</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for teacher in pending_teachers %}
+            <tr>
+                <td>{{ teacher.vidnick_id }}</td>
+                <td>{{ teacher.user.username }}</td>
+                <td>
+                    <a href="/admin/users/teacher/{{ teacher.id }}/change/">Review</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+    
+{% block script %}
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#pendingVerificationTable').DataTable();
+        });
+    </script>
+{% endblock %}

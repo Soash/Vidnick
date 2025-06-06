@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Meeting Log{% endblock %}
+{% load static %}
+{% block style %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+    .header-div {
+        background: #2A13A9;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        border-radius: 5px;
+    }
+    .content1 {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        border: 1px solid #ddd;
+    }
+    .log {
+        white-space: pre-wrap; /* Preserves line breaks in log text */
+        background: #efefef;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        overflow: auto;
+    }
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+    p{
+        margin: 10px;
+    }
+</style>
+{% endblock%}
+
+{% block content %}
+
+<div class="container">
+    <div class="header-div">
+        <h1>Meeting Log</h1>
+    </div>
+    <div class="content1">
+        <p><strong>Teacher:</strong> 
+            {% if req_history.teacher %} 
+                {{ req_history.teacher.vidnick_id }} 
+            {% else %} 
+                N/A 
+            {% endif %}
+        </p>
+        {% comment %} <p><strong>Student:</strong> {{ req_history.student.user.username }}</p> {% endcomment %}
+        {% if req_history.subject %}
+            <p><strong>Subject:</strong> {{ req_history.subject.name }}</p>
+        {% endif %}
+        {% if req_history.skill %}
+            <p><strong>Skill:</strong> {{ req_history.skill.name }}</p>
+        {% endif %}
+        <p><strong>Description:</strong> <br><p style="margin-left: 25px;">{{ req_history.description|safe|default:"N/A" }}</p></p>
+        <p><strong>Preferred Time:</strong> 
+            {% if req_history.preferred_time %} 
+                {{ req_history.preferred_time|date:"Y-m-d H:i" }} 
+            {% else %} 
+                N/A 
+            {% endif %}
+        </p>
+        <p><strong>Requested At:</strong> {{ req_history.requested_timestamp|date:"Y-m-d H:i" }}</p>
+        <p><strong>Accepted At:</strong> 
+            {% if req_history.accepted_timestamp %} 
+                {{ req_history.accepted_timestamp|date:"Y-m-d H:i" }} 
+            {% else %} 
+                N/A 
+            {% endif %}
+        </p>
+        <p><strong>Duration:</strong> {{ req_history.get_duration_display }}</p>
+        <p><strong>Amount:</strong> {{ req_history.amount|default:"N/A" }}</p>
+        <p><strong>Status:</strong> {{ req_history.get_status_display }}</p>
+        <p><strong>Meeting Status:</strong> {{ req_history.get_meeting_status_display }}</p>
+        <p><strong>Payment Status:</strong> {{ req_history.get_pay_status_display }}</p>
+        {% comment %} <p><strong>Transaction ID:</strong> {{ req_history.trans_id|default:"N/A" }}</p> {% endcomment %}
+        {% comment %} <p><strong>Meeting ID:</strong> {{ req_history.meeting_id|default:"N/A" }}</p> {% endcomment %}
+
+        {% if meeting_data %}
+            <div class="content1">
+                {% comment %} <h2>Meeting Details</h2> {% endcomment %}
+                <p><strong>Meeting ID:</strong> {{ meeting_data.meeting_id }}</p>
+                {% comment %} <p><strong>Start URL:</strong> 
+                    <a href="{{ meeting_data.start_url }}" target="_blank">{{ meeting_data.start_url }}</a>
+                </p>
+                <p><strong>Join URL:</strong> 
+                    <a href="{{ meeting_data.join_url }}" target="_blank">{{ meeting_data.join_url }}</a>
+                </p> {% endcomment %}
+                <p><strong>Start Time:</strong> {{ meeting_data.start_time|date:"Y-m-d H:i" }}</p>
+                <p><strong>End Time:</strong> {{ meeting_data.end_time|date:"Y-m-d H:i" }}</p>
+                <p><strong>Duration:</strong> {{ meeting_data.total_duration|default:"N/A" }}</p>
+                
+                {% comment %} <h3>Log</h3> {% endcomment %}
+                {% comment %} <div class="log">{{ meeting_data.log|safe|default:"No log available." }}</div> {% endcomment %}
+            </div>
+        {% else %}
+            <p>No meeting data available for this request.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock%}

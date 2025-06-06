@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Pending Requests{% endblock %}
+{% load custom_filters %}
+{% load static %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/expertise.css' %}">
+    <style>
+        a:hover {
+            text-decoration: none;
+            background-color: #4CAF50;
+        }
+        .action{
+            text-align: center;
+        }
+        @media screen and (max-width: 768px) {
+         /*   .description{
+                width: 250px;
+            }
+                */
+            td{
+                
+                text-align: left;
+            }
+            .save-btn{
+                display: inline;
+            }
+        } 
+    </style>
+{% endblock %}
+
+{% block content %}
+<h2>Pending Requests</h2>
+<div class="table-responsive">
+    <table>
+        <tr>
+            {% comment %} <th>Student</th> {% endcomment %}
+            <th>Details</th>
+            <th>Actions</th>
+        </tr>
+        {% for req in pending_requests %}
+        <tr>
+            <td>
+                {% if req.subject %}
+                    Subject: {{ req.subject.name }}
+                {% elif req.skill %}
+                    Skill: {{ req.skill.name }}
+                {% endif %}
+                <br>
+                Duration: {{ req.duration }} minutes <br>
+                Preferred Time: {{ req.preferred_time }}<br>
+            </td>
+            <td class="description">
+
+                
+
+                {{ req.description|safe }}<br>
+
+                {% comment %} {% if req.special_request %}
+                    {% if req.subject %}
+                        Amount: {{ teacher|get_rate_by_class:req.class_level }}
+                    {% elif req.skill %}
+                        Amount: {{ teacher|get_rate_by_skill:req.skill }}
+                    {% endif %}
+                    
+                {% else %}
+                    Amount:  {{ req.amount }}
+                {% endif %} {% endcomment %}
+
+                <div>
+                    {% comment %} {% if req.special_request %}
+                        {% if req.subject %}
+                            Amount: {% my_custom_tag_1 teacher req.class_level req.duration %} BDT for {{ req.duration }} minutes
+                        {% elif req.skill %}
+                            Amount: {% my_custom_tag_2 teacher req.skill req.duration %} BDT for {{ req.duration }} minutes
+                        {% endif %}
+                    {% else %}
+                        Amount:  {{ req.amount }} BDT for {{ req.duration }} minutes
+                    {% endif %}          {% endcomment %}
+                </div>
+
+                <br><br>
+
+                <a href="{% url 'accept_request' req.id %}" class="btn btn-blue" style="display: inline-block;">Accept</a>
+            </td>
+        </tr>
+        {% endfor %}
+        
+    </table>
+</div>
+{% endblock %}

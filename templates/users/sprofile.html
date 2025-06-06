@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Student Profile{% endblock %}
+{% block style %}
+
+{% endblock %}
+{% block content %}
+
+<div class="card shadow p-4 h-100">
+    <h1 class="card-title text-center">{{ user.first_name }}'s Profile</h1>
+
+    <!-- Username -->
+    <p class="h5 text-center"><strong>@{{ user.username }}</strong></p>
+
+    <!-- Profile Information -->
+    <p><i class="bi bi-envelope-fill me-2 text-primary"></i>Email: {{ user.email }}</p>
+
+</div>
+
+{% endblock %}

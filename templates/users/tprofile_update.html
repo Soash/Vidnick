@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Teacher Profile{% endblock %}
+
+{% block style %}
+<!-- Custom Styles -->
+<style>
+
+
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container px-0">
+    <div class="card shadow p-4 bg-body-tertiary">
+        <h2 class="my-4 fw-bold text-center">Update Profile</h2>
+
+        <!-- Center the form inside the card -->
+        <form method="POST" enctype="multipart/form-data" class="mx-auto" style="max-width: 700px; width: 100%;">
+            {% csrf_token %}
+
+            <!-- Row 1 -->
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_phone">Phone</label>
+                    <div class="input-group">
+                        <span class="input-group-text">+880</span>
+                        {{ form.phone }}
+                    </div>
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_telegram_user_id">Telegram User ID</label>
+                    <div class="input-group">
+                        {{ form.telegram_user_id }}
+                    </div>
+                    <div style="font-size: smaller;color: dimgray;text-align: center;">
+                        Give Telegram User ID to get notification in Telegram.
+                        <a href="https://www.youtube.com/watch?v=wVnSerJKHdY" target="_blank">Tutorial</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_gender">Gender</label>
+                    {{ form.gender }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_gender">Facebook ID</label>
+                    {{ form.facebook_id }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_gender">Address</label>
+                    {{ form.address }}
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_institute">University</label>
+                    {{ form.university }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_department">Department</label>
+                    {{ form.department }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_department">Session</label>
+                    {{ form.session }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_institute">College</label>
+                    {{ form.college_name }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_department">HSC Result</label>
+                    {{ form.hsc_result }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_institute">School</label>
+                    {{ form.school_name }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_department">SSC Result</label>
+                    {{ form.ssc_result }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_department">Preferred Teaching Language</label>
+                    {{ form.language }}
+                </div>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_payment_method">Payment Method</label>
+                    {{ form.payment_method }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_payment_id">Payment ID</label>
+                    {{ form.payment_id }}
+                </div>
+            </div>
+
+            <!-- File uploads -->
+            <div class="form-row">
+                <div class="form-group col-12 mb-3">
+                    <label for="id_image">Profile Image</label>
+                    {{ form.image }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_verification_document">Verification Document (NID / Passport / Student ID Card)</label>
+                    {{ form.verification_document }}
+                </div>
+                <div class="form-group col-12 mb-3">
+                    <label for="id_verification_document">Upload your CV</label>
+                    {{ form.cv }}
+                </div>
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="form-row mb-4">
+                <div class="col-12 d-flex flex-column gap-2">
+                    <div class="mb-3">
+                        <label class="form-label d-block">Are you a content creator?</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_content_creator" id="creator_yes" value="True"
+                                   {% if form.is_content_creator.value == True %}checked{% endif %}>
+                            <label class="form-check-label" for="creator_yes">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_content_creator" id="creator_no" value="False"
+                                   {% if form.is_content_creator.value == False %}checked{% endif %}>
+                            <label class="form-check-label" for="creator_no">No</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-check">
+                        {{ form.agrees_commission }}
+                        <label class="form-check-label" for="id_agrees_commission">
+                            I agree to the commission policy
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        {{ form.agrees_terms }}
+                        <label class="form-check-label" for="id_agrees_terms">
+                            I agree to the terms
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill shadow-sm">
+                    Update Profile
+                </button>
+            </div>
+        </form>
+
+
+
+          
+    </div>
+</div>
+  
+  
+{% endblock %}
+
+
+{% block script %}
+    
+{% endblock script %}
+    

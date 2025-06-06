@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Teacher Profile{% endblock %}
+{% block style %}
+<style>
+    #notifyButton {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+</style>
+<script defer>
+    window.addEventListener('DOMContentLoaded', () => {
+        const notifyButton = document.getElementById('notifyButton');
+        if (notifyButton) {
+            notifyButton.click();
+        }
+    });
+</script>
+{% endblock %}
+{% block content %}
+
+
+<div class="card shadow p-4">
+    <h1 class="card-title text-center">{{ user.first_name }}'s Profile</h1>
+
+    <!-- Username -->
+    <p class="h5 text-center"><strong>@{{ user.username }}</strong></p>
+
+    <!-- Profile Information -->
+    <p><i class="bi bi-envelope-fill me-2 text-primary"></i>Email: {{ user.email }}</p>
+    <p><i class="bi bi-person-circle me-2 text-info"></i>Vidnick ID: {{ teacher.vidnick_id }}</p>
+    <p><i class="bi bi-wallet-fill me-2 text-warning"></i>Balance: {{ teacher.current_balance }} BDT</p>
+    <p><i class="bi bi-check-circle-fill me-2 text-success"></i>Classes Completed: {{ teacher.total_class }}</p>
+    <p><i class="bi bi-x-circle-fill me-2 text-danger"></i>Classes Missed: {{ teacher.missed_class }}</p>
+    <p><i class="bi bi-star-fill me-2 text-warning"></i>Rating: {{ teacher.average_rating|default:"-" }}/10</p>
+    <p><i class="bi bi-patch-check-fill me-2 text-success"></i>Status: {{ teacher.get_verification_display }}</p>
+
+    <!-- Action Buttons -->
+    <div class="mt-4 d-flex justify-content-center gap-3">
+        <a href="{% url 'update_teacher_profile' %}" class="btn btn-primary">Edit Profile</a>
+    </div>
+
+
+    <div>
+        <button id="notifyButton"><i class="fas fa-bell"></i></button>
+    </div>
+    <div class="mt-3">
+        <button id="demoNotifyButton" class="btn btn-warning">Send Demo Notification</button>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block script %}
+
+<!-- Firebase JS -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js"></script>
+
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyC57YV45aQ0VwWEKA26kswphT4J0RKpvgs",
+        authDomain: "vidnik-pn.firebaseapp.com",
+        projectId: "vidnik-pn",
+        storageBucket: "vidnik-pn.appspot.com",
+        messagingSenderId: "298821539958",
+        appId: "1:298821539958:web:e186b5ae09878ee4592757",
+        measurementId: "G-E4GPHBSNH5"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+
+    messaging.onMessage((payload) => {
+        // console.log('Message received. ', payload);
+        console.log('Message received.');
+    
+        // Display notification manually when app is in foreground
+        const notificationTitle = payload.notification.title;
+        const notificationOptions = {
+            body: payload.notification.body,
+        };
+    
+        if (Notification.permission === "granted") {
+            const notification = new Notification(notificationTitle, notificationOptions);
+        }
+    });
+    
+    function getToken() {
+        messaging.getToken({ vapidKey: "BJFCIgh8Nk1DxUVNkIMRZg_h0L-ZPYvPBpjgdK2HZIPIe6-NV5tdsEHqRKhEErBw_5Sf6BS2Wm7kqACPHGeyTSE" }).then((currentToken) => {
+            if (currentToken) {
+                console.log(currentToken);
+                sendTokenToServer(currentToken);
+            } else {
+                console.log('No registration token available. Request permission to generate one.');
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+            document.getElementById('token').textContent = 'click again';
+        });
+    }
+
+    function sendTokenToServer(token) {
+        fetch('/save-token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ token: token })
+        }).then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
+<script>
+    document.getElementById('notifyButton').addEventListener('click', function() {
+        // Check if the browser supports notifications
+        if ('Notification' in window) {
+            // Request notification permission
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    // If permission granted, get the FCM token
+                    getToken();
+                } else {
+                    console.log('Notification permission denied.');
+                }
+            });
+        } else {
+            alert('Your browser does not support notifications.');
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('demoNotifyButton').addEventListener('click', function() {
+        messaging.getToken({ vapidKey: "BJFCIgh8Nk1DxUVNkIMRZg_h0L-ZPYvPBpjgdK2HZIPIe6-NV5tdsEHqRKhEErBw_5Sf6BS2Wm7kqACPHGeyTSE" })
+            .then((token) => {
+                if (token) {
+                    fetch('/send-demo-notification/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({ token: token })
+                    }).then(response => response.json())
+                      // .then(data => console.log("Demo notification response:", data))
+                      .then(data => console.log("Demo notification sent."))
+                      .catch(error => console.error('Error sending demo notification:', error));
+                } else {
+                    console.log('No registration token available.');
+                }
+            }).catch((err) => {
+                console.error('Error retrieving token:', err);
+            });
+    });
+</script>
+
+
+{% endblock %}

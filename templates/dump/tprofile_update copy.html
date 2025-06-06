@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Update Teacher Profile{% endblock %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/profile_update.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Update Profile</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            {{ form.phone }}
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            {{ form.gender }}
+        </div>
+        
+        <div class="form-group">
+            <label for="telegram_user_id">Telegram User ID</label>
+            {{ form.telegram_user_id }}
+            <div style="font-size: smaller;color: dimgray;text-align: center;">
+                Give Telegram User ID to get notification in telegram.
+                <a href="https://www.youtube.com/watch?v=wVnSerJKHdY" target="_blank">Tutorial</a>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="facebook_id">Facebook ID</label>
+            {{ form.facebook_id }}
+        </div>
+        
+        <div class="form-group">
+            <label for="address">Address</label>
+            {{ form.address }}
+        </div>
+        
+        <div class="form-group">
+            <label for="image">Profile Image</label>
+            {{ form.image }}
+        </div>
+
+        <hr><br>
+        
+        <div class="form-group">
+            <label for="institute">Institute</label>
+            {{ form.institute }}
+        </div>
+
+        <div class="form-group">
+            <label for="educational_qualification">Educational Qualification</label>
+            {{ form.educational_qualification }}
+        </div>
+
+        <div class="form-group">
+            <label for="department">Department</label>
+            {{ form.department }}
+        </div>
+        
+        <div class="form-group">
+            <label for="year_semester">Year/Semester</label>
+            {{ form.year_semester }}
+        </div>
+        
+        <hr><br>
+
+        <div class="form-group">
+            <label for="college_name">College Name</label>
+            {{ form.college_name }}
+        </div>
+        
+        <div class="form-group">
+            <label for="hsc_result">HSC Result</label>
+            {{ form.hsc_result }}
+        </div>
+        
+        <hr><br>
+
+        <div class="form-group">
+            <label for="school_name">School Name</label>
+            {{ form.school_name }}
+        </div>
+        
+        <div class="form-group">
+            <label for="ssc_result">SSC Result</label>
+            {{ form.ssc_result }}
+        </div>
+
+        <hr><br>
+        
+        <div class="form-group">
+            <label for="background">Background</label>
+            {{ form.background }}
+        </div>
+        
+        <div class="form-group">
+            <label for="camera_tools">Camera Tools</label>
+            {{ form.camera_tools }}
+        </div>
+        
+        <div class="form-group">
+            <label for="payment_method">Payment Method</label>
+            {{ form.payment_method }}
+        </div>
+        
+        <div class="form-group">
+            <label for="payment_id">Payment ID</label>
+            {{ form.payment_id }}
+        </div>
+        
+        <div class="form-group">
+            <label for="verification_document">Verification Document</label>
+            {{ form.verification_document }}
+        </div>
+
+        <hr><br>
+
+        <div class="form-check">
+            <div>
+                Are you interested in making educational contents/videos/live sessions for this platform?
+            </div>
+            <label for="is_content_creator">Yes, I am interested.</label>
+            {{ form.is_content_creator }}
+        </div>
+        <br>
+        <div class="form-check">
+            <label for="agrees_terms">I agree to the terms</label>
+            {{ form.agrees_terms }}
+        </div>
+        
+        <div class="form-check">
+            <label for="agrees_commission">I agree to the commission policy</label>
+            {{ form.agrees_commission }}
+        </div>
+        
+        <br><br>
+        
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+    <br>
+    {% if teacher.verification != 'verified' %}
+    <form action="{% url 'send_verification_email' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-green">Verify</button>
+    </form>
+    {% endif %}
+    <br>
+    <button onclick="
+                    window.location.href='{% url "reset_password" %}';
+                    "
+            class="btn btn-red">Reset Password</button>      
+</div>
+
+{% endblock %}

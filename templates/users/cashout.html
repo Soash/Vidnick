@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Cashout{% endblock %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/expertise.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<style>
+    /* Additional custom styling */
+    .profile-card {
+        background-color: #f9f9f9;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .profile-header .username {
+        font-size: 1.1rem;
+        color: #555;
+    }
+
+    .profile-body p {
+        font-size: 1rem;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .btn-blue {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .btn-blue:hover {
+        background-color: #0056b3;
+    }
+
+    .table-responsive {
+        margin-top: 30px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .text-danger {
+        color: red;
+    }
+
+    .notification-info {
+        color: #007bff;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-card">
+    <div class="profile-header">
+        <h1>{{ user.first_name }}'s Profile</h1>
+        <p class="username">@{{ user.username }}</p>
+    </div>
+
+    <div class="profile-body">
+        <p><i class="bi bi-envelope-fill me-2 text-primary"></i>Email: {{ user.email }}</p>
+        <p><i class="bi bi-person-circle me-2 text-info"></i>Vidnick ID: {{ teacher.vidnick_id }}</p>
+        <p><i class="bi bi-check-circle-fill me-2 text-success"></i>Status: {{ teacher.get_verification_display }}</p>
+        <p><i class="bi bi-wallet-fill me-2 text-warning"></i>Total Income: {{ teacher.total_income }} BDT</p>
+        <p><i class="bi bi-cash-coin me-2 text-success"></i>Total Cashout: {{ teacher.total_cashout }} BDT</p>
+        <p><i class="bi bi-wallet me-2 text-primary"></i>Current Balance: {{ teacher.current_balance }} BDT</p>
+        
+        {% if teacher.verification == "verified" %}
+        <form method="post" action="{% url 'cashout_view' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-blue">Cashout {{ teacher.current_balance }} BDT</button>
+        </form>
+        {% else %}
+        <p class="text-danger">You cannot cashout now. Please complete your profile and verify to cashout. 
+
+            <form action="{% url 'send_verification_email' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">Verify Now</button>
+            </form>
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Transaction History Table -->
+{% if cashout_transactions %}
+<h1 class="text-center mt-4">All Transactions</h1>
+<div class="table-responsive">
+    <table>
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Transaction ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in cashout_transactions %}
+                <tr>
+                    <td>{{ data.amount }} BDT</td>
+                    <td>{{ data.date }}</td>
+                    <td>{{ data.transaction_id }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-center text-muted">No transactions found.</p>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    // Optionally, you can include Firebase or any other scripts here if needed
+</script>
+{% endblock %}
